@@ -150,6 +150,26 @@ const Feed = () => {
               {post.text}
             </p>
             
+            {/* Image content */}
+            {post.imageUrl && (
+              <div style={{ marginBottom: '15px' }}>
+                <img
+                  src={post.imageUrl}
+                  alt="Post image"
+                  style={{
+                    width: '100%',
+                    maxHeight: '400px',
+                    objectFit: 'cover',
+                    borderRadius: '8px',
+                    border: '1px solid #ddd'
+                  }}
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+            )}
+            
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
               <button
                 onClick={() => handleLike(post.id, post.likes)}

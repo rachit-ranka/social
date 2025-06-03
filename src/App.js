@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from 'firebase/auth';
 import { auth } from './firebase';
 import Login from './components/Login';
 import CreatePost from './components/CreatePost';
 import Feed from './components/Feed';
+import Search from './components/Search';
+import Profile from './components/Profile';
 import './App.css';
 
 function App() {
   const [user, loading, error] = useAuthState(auth);
+  const [activeTab, setActiveTab] = useState('feed'); // 'feed', 'search', or 'profile'
 
   const handleSignOut = () => {
     signOut(auth);
@@ -70,9 +73,74 @@ function App() {
         </div>
       </header>
       
+      {/* Navigation Tabs */}
+      <nav style={{
+        maxWidth: '600px',
+        margin: '0 auto 20px auto',
+        padding: '0 20px'
+      }}>
+        <div style={{
+          display: 'flex',
+          gap: '10px',
+          borderBottom: '1px solid #ddd'
+        }}>
+          <button
+            onClick={() => setActiveTab('feed')}
+            style={{
+              padding: '12px 24px',
+              backgroundColor: 'transparent',
+              border: 'none',
+              borderBottom: activeTab === 'feed' ? '3px solid #007bff' : '3px solid transparent',
+              cursor: 'pointer',
+              fontSize: '16px',
+              fontWeight: activeTab === 'feed' ? 'bold' : 'normal',
+              color: activeTab === 'feed' ? '#007bff' : '#666'
+            }}
+          >
+            🏠 Feed
+          </button>
+          <button
+            onClick={() => setActiveTab('search')}
+            style={{
+              padding: '12px 24px',
+              backgroundColor: 'transparent',
+              border: 'none',
+              borderBottom: activeTab === 'search' ? '3px solid #007bff' : '3px solid transparent',
+              cursor: 'pointer',
+              fontSize: '16px',
+              fontWeight: activeTab === 'search' ? 'bold' : 'normal',
+              color: activeTab === 'search' ? '#007bff' : '#666'
+            }}
+          >
+            🔍 Search
+          </button>
+          <button
+            onClick={() => setActiveTab('profile')}
+            style={{
+              padding: '12px 24px',
+              backgroundColor: 'transparent',
+              border: 'none',
+              borderBottom: activeTab === 'profile' ? '3px solid #007bff' : '3px solid transparent',
+              cursor: 'pointer',
+              fontSize: '16px',
+              fontWeight: activeTab === 'profile' ? 'bold' : 'normal',
+              color: activeTab === 'profile' ? '#007bff' : '#666'
+            }}
+          >
+            👤 Profile
+          </button>
+        </div>
+      </nav>
+      
       <main>
-        <CreatePost />
-        <Feed />
+        {activeTab === 'feed' && (
+          <>
+            <CreatePost />
+            <Feed />
+          </>
+        )}
+        {activeTab === 'search' && <Search />}
+        {activeTab === 'profile' && <Profile />}
       </main>
     </div>
   );
